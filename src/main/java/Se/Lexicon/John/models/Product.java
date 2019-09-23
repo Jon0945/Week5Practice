@@ -17,6 +17,12 @@ public class Product  {
     public int getStock() { return stock; }
     public void setStock(int stock) { this.stock = stock; }
 
+    public Product(String productname, double price, int stock) {
+        this.productname = productname;
+        this.price = price;
+        this.stock = stock;
+    }
+
     @Override
     public String toString () {
         return null;

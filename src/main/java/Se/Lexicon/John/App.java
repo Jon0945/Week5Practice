@@ -1,57 +1,37 @@
 package Se.Lexicon.John;
 
 import Se.Lexicon.John.interfaces.Action;
+import Se.Lexicon.John.interfaces.Conditional;
 import Se.Lexicon.John.models.Product;
 
-public class App
-{
-    public static void main( String[] args ) { }
-    Product[] products = new Product[5];
+import java.util.Arrays;
+import java.util.List;
 
-    public class findEmptyStock implements Action {
-        @Override
-        public void execute(Product p) {
-            for (Product x: products) {
-                if (x.getStock() <=0) {
-                    System.out.println(x);
-                }
-            }
-        }
-    }
 
-    public class printBProducts implements Action {
-        @Override
-        public void execute(Product p) {
-            for (Product x: products) {
-                if (x.getProductname().charAt(0) == 'B') {
-                    System.out.println(x);
-                }
-            }
-        }
-    }
+public class App {
 
-    public class findPriceRange implements Action {
-        @Override
-        public void execute(Product p) {
-            for (Product x: products) {
-                if (x.getPrice()>100 & x.getPrice()<150) {
-                    System.out.println(x);
-                }
-            }
-        }
+
+    public static void main(String[] args) {
+        Product[] prod = new Product[4];
+        prod[0] = new Product("Pantofflor", 125, 5);
+        prod[1] = new Product("Bapelsiner", 75, 20);
+        prod[2] = new Product("Äggmökar", 10, 0);
+        prod[3] = new Product("Brustna drömmar", 250, 9);
+        List<Product> products = Arrays.asList(prod);
+        findProduct(products, System.out::println ,p -> p.getStock()<=0);
+        findProduct(products, System.out::println ,p -> p.getProductname().charAt(0) == 'B');
+        findProduct(products, System.out::println ,p -> p.getPrice()>100 & p.getPrice()<150);
+        findProduct(products, p -> p.setPrice(p.getPrice()*1.5),p -> p.getStock()>0 & p.getStock()<10);
+
 
     }
 
-    public class increseStockPrice implements Action {
-        @Override
-        public void execute(Product p) {
-            for (Product x: products) {
-                if (x.getStock()<10 & x.getPrice()>0) {
-                    x.setPrice((x.getPrice()*1.5));
-                }
+    public static void findProduct(List<Product> products, Action action, Conditional onCondition) {
+        for (Product p : products) {
+            if (onCondition.test(p)) {
+                action.execute((p));
             }
         }
-
     }
 }
-}
+
